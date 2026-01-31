@@ -134,6 +134,10 @@ h1 {
   transition: all 0.2s ease;
 }
 
+.btn.is-hidden {
+  display: none;
+}
+
 .btn:hover {
   background: var(--accent);
   color: var(--bg);
