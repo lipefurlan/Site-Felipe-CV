@@ -77,10 +77,58 @@ button {
   gap: 20px;
   font-size: 14px;
   color: var(--muted);
+  align-items: center;
 }
 
 .nav-links a:hover {
   color: var(--accent);
+}
+
+.nav-language {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line);
+}
+
+.lang-toggle {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.lang-toggle.is-active {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.lang-toggle:not(.is-active):hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text);
+}
+
+.lang-toggle:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .hero {

@@ -57,3 +57,17 @@ document.addEventListener("keydown", (event) => {
     closeModal();
   }
 });
+
+const languageButtons = document.querySelectorAll(".lang-toggle");
+
+languageButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    languageButtons.forEach((item) => {
+      item.classList.remove("is-active");
+      item.setAttribute("aria-pressed", "false");
+    });
+
+    button.classList.add("is-active");
+    button.setAttribute("aria-pressed", "true");
+  });
+});
