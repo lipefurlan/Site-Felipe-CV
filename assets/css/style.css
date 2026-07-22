@@ -368,6 +368,19 @@ h1 {
   max-width: 100%;
 }
 
+.experience-list {
+  color: var(--muted);
+  list-style: disc;
+  padding-left: 20px;
+  display: grid;
+  gap: 6px;
+  max-width: 100%;
+}
+
+.experience-list li {
+  text-align: justify;
+}
+
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
