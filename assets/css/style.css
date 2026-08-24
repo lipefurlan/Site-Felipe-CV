@@ -396,6 +396,10 @@ h1 {
   min-height: unset;
 }
 
+.card.is-featured {
+  grid-column: 1 / -1;
+}
+
 .card h3 {
   font-size: 17px;
 }

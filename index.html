@@ -84,6 +84,14 @@
                     >LinkedIn</a
                   >
                 </p>
+                <p>
+                  <a
+                    href="https://github.com/lipefurlan"
+                    target="_blank"
+                    rel="noreferrer"
+                    >GitHub</a
+                  >
+                </p>
               </div>
               <div class="info-card">
                 <h3>Stack principal</h3>
@@ -184,37 +192,34 @@
             <article class="timeline-item">
               <span class="timeline-dot" aria-hidden="true"></span>
               <div class="timeline-content">
-                <h3>R&amp;D Intern</h3>
+                <h3>Research &amp; Development Intern</h3>
                 <p class="experience-company">
-                  Motorola • Research &amp; Development • Angular, TypeScript, Java,
-                  Spring Boot, BigQuery
+                  Motorola Mobility (a Lenovo Company) • Angular, TypeScript, HTML,
+                  CSS, JavaScript, Java, BigQuery, CloudSQL
                 </p>
-                <p class="experience-meta">Período: Atual</p>
-                <p class="experience-description">
-                  Desenvolvimento full-stack (Angular/TypeScript no front-end e
-                  Java/Spring Boot no back-end) de um módulo de planejamento e
-                  governança de custos em uma plataforma web interna corporativa,
-                  atuando com time global.
-                </p>
+                <p class="experience-meta">Dez/2025 – Atual</p>
                 <ul class="experience-list">
                   <li>
-                    Edição em lote com salvamento em transação única no BigQuery,
-                    reduzindo chamadas de rede e melhorando a performance da grid
-                    de dados.
+                    Concepção e entrega de um módulo de consolidação de custos
+                    dentro da plataforma global de PLCM da Motorola, substituindo
+                    por um único sistema integrado um fechamento mensal feito
+                    manualmente em Google Sheets por mais de 10 anos, com mais de
+                    200 produtos distribuídos em mais de 400 planilhas.
+                    Levantamento de requisitos conduzido diretamente com dois
+                    times globais (Prototipagem e Product Lifecycle Management).
+                    Em produção desde ago/2026.
                   </li>
                   <li>
-                    Sistema de versionamento com log de auditoria e rollback de
-                    estados, permitindo restaurar versões anteriores das
-                    simulações.
+                    Construção de um sistema full-stack em Java/Spring Boot e
+                    BigQuery, com transações em lote, log de auditoria de versões
+                    com rollback/restauração e interface de validação em Angular.
                   </li>
                   <li>
-                    Arquitetura de dados em camadas (linha de base oficial, visão
-                    de trabalho corrente e ambientes de simulação isolados) para
-                    edição segura sem afetar os dados consolidados.
-                  </li>
-                  <li>
-                    Dashboards de visão consolidada (hierarquia de custos e matriz
-                    de despesas por portfólio) para apoio à tomada de decisão.
+                    Arquitetura de documentação do monorepo da plataforma interna
+                    com arquivos .md estruturados, acelerando o onboarding de
+                    novos desenvolvedores e permitindo que assistentes de IA gerem
+                    sugestões contextualizadas e alinhadas às convenções do
+                    projeto.
                   </li>
                 </ul>
               </div>
@@ -238,18 +243,26 @@
             <article class="timeline-item">
               <span class="timeline-dot" aria-hidden="true"></span>
               <div class="timeline-content">
-                <h3>Parceria Acadêmico/Profissional</h3>
+                <h3>Pesquisador em Visão Computacional</h3>
                 <p class="experience-company">
-                  CITEC — Centro de Inovação e Tecnologia (FACAMP) • Amanco Wavin •
-                  HTML, CSS, JS, Python e banco de dados
+                  Amanco Wavin (via CITEC FACAMP) • Python, OpenCV, YOLOv8
                 </p>
                 <p class="experience-meta">Fev/2025 – Dez/2025</p>
-                <p class="experience-description">
-                  Desenvolvimento de sistema de visão computacional para inspeção
-                  de peças injetadas com Python e técnicas de Machine Learning.
-                  Implementação de detecção de falhas por imagem e integração com
-                  banco de dados.
-                </p>
+                <ul class="experience-list">
+                  <li>
+                    Desenvolvimento de um sistema de visão computacional para
+                    detecção de defeitos em peças injetadas com Python, OpenCV e
+                    YOLOv8, atingindo mAP@0.5 de 88,6% e F1-score de 0,88 em
+                    amostras reais de produção.
+                  </li>
+                  <li>
+                    Colaboração semanal presencial com os times de Produção e
+                    Engenharia Mecânica da Amanco Wavin para mapear requisitos de
+                    inspeção, coletar dados rotulados e validar os resultados do
+                    modelo contra padrões reais de defeito, como parte de um
+                    projeto de pesquisa entre academia e indústria.
+                  </li>
+                </ul>
               </div>
             </article>
             <article class="timeline-item">
@@ -292,6 +305,43 @@
             <div class="divider"></div>
           </div>
           <div class="cards">
+            <article class="card is-featured">
+              <h3>Cerchia — Vendedor de IA e fidelidade no WhatsApp</h3>
+              <p>
+                Plataforma SaaS que dá ao pequeno empreendedor brasileiro um
+                vendedor de IA e um programa de fidelidade dentro do WhatsApp. No
+                Brasil, o WhatsApp é o principal canal de comunicação do país e,
+                para boa parte das lojas pequenas, a única vitrine que elas têm —
+                por isso o produto vive lá dentro. O agente atende clientes, mostra
+                o catálogo e fecha vendas; o módulo de fidelidade converte cada
+                compra em moedas que o cliente acompanha e resgata em um app
+                próprio.
+              </p>
+              <p>
+                O saldo de pontos nunca é um número editável: ele é a soma de um
+                livro-razão imutável, com cache materializado gravado na mesma
+                transação e reconciliação noturna, desenhado para aguentar uma base
+                de 60 mil clientes sem perder um centavo.
+              </p>
+              <p>
+                Em produção, em piloto fechado: plataforma multi-loja no ar com
+                lojas de teste, módulo de fidelidade lançado em agosto/2026 e
+                piloto com uma rede real de sorveterias em preparação.
+              </p>
+              <span class="tag"
+                >TypeScript • Node.js (Express) • PostgreSQL • Drizzle ORM • React
+                • WhatsApp Business API • Anthropic API • Railway</span
+              >
+              <div style="margin-top: 14px">
+                <a
+                  class="btn"
+                  href="https://cerchia.com.br"
+                  target="_blank"
+                  rel="noreferrer"
+                  >Conhecer o Cerchia</a
+                >
+              </div>
+            </article>
             <article class="card">
               <h3>UniHub — Plataforma de bem-estar universitário</h3>
               <p>
@@ -521,6 +571,12 @@
             target="_blank"
             rel="noreferrer"
             >LinkedIn</a
+          >
+          <a
+            href="https://github.com/lipefurlan"
+            target="_blank"
+            rel="noreferrer"
+            >GitHub</a
           >
           <span>Americana, SP</span>
         </div>
