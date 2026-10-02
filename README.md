@@ -1,14 +1,29 @@
-# Site Felipe Furlan CV
+# Felipe Furlan — CV site
 
-Site estatico do curriculo com seções de perfil, experiencia e galeria.
+Personal résumé and portfolio site, in Portuguese and English.
 
-## Como visualizar
+**Live:** [felipefurlan.com.br](https://felipefurlan.com.br) · English version at [`/en`](https://felipefurlan.com.br/en/)
 
-- Abra `index.html` no navegador.
+## Stack
 
-## Estrutura
+Static HTML, CSS and vanilla JavaScript — no build step. Hosted on Netlify.
 
-- `index.html`: pagina principal
-- `assets/css/style.css`: estilos
-- `assets/js/script.js`: interacoes e modal
-- `Fotos/`: imagens da galeria
+## Running locally
+
+Open `index.html` in a browser, or serve the folder:
+
+```bash
+python -m http.server 8000
+```
+
+Then open http://localhost:8000
+
+## Structure
+
+- `index.html` — main page (Portuguese)
+- `en/index.html` — English version
+- `portfolio-sites.html` — portfolio of websites
+- `assets/css/style.css` — styles
+- `assets/js/script.js` — interactions and the photo modal
+- `Fotos/` — gallery images
+- `historia-rabiscada/` — landing, privacy and terms pages for the História Rabiscada YouTube channel
