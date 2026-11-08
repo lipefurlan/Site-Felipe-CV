@@ -251,7 +251,10 @@ $$('h2[data-words]').forEach((el) => {
   const panels = $$('.panel', stack);
   const dots = $('[data-show-dots]');
   const counter = $('[data-show-i]');
-  const n = titles.length;
+  const n = titles.length;          // projetos
+  const N = panels.length;          // painéis (2 por projeto)
+  const projOf = (k) => +panels[k].dataset.p;
+  const firstPanel = (i) => panels.findIndex((p) => +p.dataset.p === i);
   let current = -1;
   titles.forEach((_, i) => {
     const b = document.createElement('button');
@@ -260,42 +263,83 @@ $$('h2[data-words]').forEach((el) => {
     dots.appendChild(b);
   });
   const dotEls = $$('button', dots);
-  const setActive = (i) => {
-    if (i === current) return;
-    current = i;
-    titles.forEach((t, k) => t.classList.toggle('is-on', k === i));
-    texts.forEach((t, k) => t.classList.toggle('is-on', k === i));
-    dotEls.forEach((d, k) => d.classList.toggle('is-on', k === i));
-    counter.textContent = String(i + 1).padStart(2, '0');
-  };
-  const GAP = 26;
-  // painel ativo centralizado na coluna: metade de um painel para cima, mais os anteriores
-  const offsetFor = (p) => -(panels[0].offsetHeight / 2) - p * (panels[0].offsetHeight + GAP);
   $$('[data-dce]').forEach((a) => { if (DCE_URL) { a.href = DCE_URL; a.target = '_blank'; a.removeAttribute('data-scroll'); } });
 
   if (!isDesktop() || reduce) {
     // celular: sem fixar; a pilha vira uma faixa horizontal e os textos ficam todos visíveis
-    setActive(0);
     sec.classList.add('show--static');
-    // intercala título e texto de cada projeto, e some com a pilha única
     const left = $('.show__left', sec);
     titles.forEach((t, i) => { t.classList.add('is-on'); texts[i].classList.add('is-on'); left.appendChild(t); left.appendChild(texts[i]); });
     $('[data-show-titles]').remove(); $('[data-show-texts]').remove();
+    counter.textContent = '01';
     return;
   }
+
+  // títulos: cada palavra entra por uma máscara (estilo Robin Noguier)
+  const titleWords = titles.map((t) => splitWords(t, true));
+  gsap.set(titles, { opacity: 1, y: 0 });
+  titleWords.forEach((ws) => gsap.set(ws, { y: 0, yPercent: 140 }));
+  gsap.set(texts, { opacity: 0, y: 24 });
+
+  const setActive = (i, animate = true) => {
+    if (i === current) return;
+    const dir = i > current ? 1 : -1;
+    const prev = current;
+    current = i;
+    dotEls.forEach((d, k) => d.classList.toggle('is-on', k === i));
+    titles.forEach((t, k) => t.classList.toggle('is-on', k === i));
+    texts.forEach((t, k) => t.classList.toggle('is-on', k === i));
+    if (!animate) {
+      gsap.set(titleWords[i], { yPercent: 0 });
+      gsap.set(texts[i], { opacity: 1, y: 0 });
+      counter.textContent = String(i + 1).padStart(2, '0');
+      return;
+    }
+    if (prev >= 0) {
+      gsap.to(titleWords[prev], { yPercent: -140 * dir, duration: 0.45, ease: 'power3.in', stagger: 0.02 * dir, overwrite: true });
+      gsap.to(texts[prev], { opacity: 0, y: -18 * dir, duration: 0.3, ease: 'power2.in', overwrite: true });
+    }
+    gsap.fromTo(titleWords[i], { yPercent: 140 * dir }, { yPercent: 0, duration: 0.85, ease: 'power4.out', stagger: 0.045 * dir, delay: 0.12, overwrite: true });
+    gsap.fromTo(texts[i], { opacity: 0, y: 26 * dir }, { opacity: 1, y: 0, duration: 0.65, ease: outEase, delay: 0.22, overwrite: true });
+    gsap.fromTo(counter, { yPercent: 60 * dir, opacity: 0 }, {
+      yPercent: 0, opacity: 1, duration: 0.5, ease: outEase, overwrite: true,
+      onStart: () => { counter.textContent = String(i + 1).padStart(2, '0'); },
+    });
+  };
+
+  const GAP = 26;
+  const panelH = () => panels[0].offsetHeight;
+  // painel ativo centralizado na coluna: metade de um painel para cima, mais os anteriores
+  const offsetFor = (p) => -(panelH() / 2) - p * (panelH() + GAP);
+  const moveStack = gsap.quickTo(stack, 'y', { duration: 0.75, ease: 'power3' });
+  const imgs = panels.map((p) => $('img', p));
+  const parallax = (p) => {
+    imgs.forEach((img, k) => {
+      if (!img) return;
+      const d = gsap.utils.clamp(-1.6, 1.6, k - p);
+      gsap.set(img, { yPercent: -9 * d, scale: 1 + Math.abs(d) * 0.02 });
+    });
+  };
+
   let st;
-  function goTo(i) { if (st) scrollTo(st.start + (st.end - st.start) * (i / (n - 1))); }
-  st = ScrollTrigger.create({
-    trigger: sec, start: 'top top', end: () => '+=' + innerHeight * (n - 1) * 0.9, pin: '.show__pin', scrub: true,
-    snap: { snapTo: 1 / (n - 1), duration: 0.5, ease: 'power2.inOut' },
-    onUpdate: (s) => {
-      const p = s.progress * (n - 1);
-      setActive(Math.round(p));
-      gsap.set(stack, { y: offsetFor(p), skewY: -7 });
-    },
-  });
+  function goTo(i) { if (st) scrollTo(st.start + (st.end - st.start) * (firstPanel(i) / (N - 1))); }
   gsap.set(stack, { y: offsetFor(0), skewY: -7 });
-  setActive(0);
+  parallax(0);
+  setActive(0, false);
+  st = ScrollTrigger.create({
+    trigger: sec, start: 'top top', end: () => '+=' + innerHeight * (N - 1) * 0.55, pin: '.show__pin', scrub: true,
+    snap: { snapTo: 1 / (N - 1), duration: { min: 0.25, max: 0.6 }, delay: 0.05, ease: 'power2.inOut' },
+    invalidateOnRefresh: true,
+    onUpdate: (s) => {
+      const p = s.progress * (N - 1);
+      moveStack(offsetFor(p));
+      parallax(p);
+      setActive(projOf(Math.round(p)));
+    },
+    onRefresh: (s) => { gsap.set(stack, { y: offsetFor(s.progress * (N - 1)), skewY: -7 }); },
+  });
+  // clique num painel leva ao projeto dele
+  panels.forEach((pn, k) => pn.addEventListener('click', () => goTo(projOf(k))));
 })();
 
 /* ---------- Faixa de imagens ---------- */
