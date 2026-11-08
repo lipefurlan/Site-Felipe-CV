@@ -27,3 +27,10 @@ Then open http://localhost:8000
 - `assets/js/script.js` — interactions and the photo modal
 - `Fotos/` — gallery images
 - `historia-rabiscada/` — landing, privacy and terms pages for the História Rabiscada YouTube channel
+
+## Landing page (redesign, em andamento)
+
+`site/` holds the new landing-page version of the portfolio (served at `/site/` until it replaces the root). Same content as the CV, with GSAP + ScrollTrigger, Lenis smooth scroll and a small three.js scene, all vendored in `site/vendor/` so there is still no build step. Optimized photos live in `site/img/`.
+
+- `WORLD_URL` and `DCE_URL` at the top of `site/main.js` link the "Ver em 3D" portal and the DCE site card once those exist.
+- The project panels in the showcase are CSS mockups; swap them for real screenshots when available.

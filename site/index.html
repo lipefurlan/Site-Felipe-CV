@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Felipe Furlan · Portfólio</title>
+  <meta name="description" content="Felipe Furlan: desenvolvedor full-stack, R&amp;D Intern na Motorola e estudante de Engenharia da Computação na FACAMP. Projetos, carreira e contato." />
+  <meta property="og:title" content="Felipe Furlan · Portfólio" />
+  <meta property="og:description" content="Developer, engineer, project leader." />
+  <meta property="og:image" content="img/felipe.webp" />
+  <meta name="theme-color" content="#1f3a2e" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600&family=Inter:wght@400;500;600&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="is-loading">
+
+  <!-- Loader: saudação rápida antes de abrir a página -->
+  <div class="loader" aria-hidden="true">
+    <div class="loader__word" data-loader-word>Olá</div>
+    <div class="loader__count" data-loader-count>0</div>
+  </div>
+  <div class="curtain" aria-hidden="true"></div>
+
+  <div class="cursor" aria-hidden="true"><span class="cursor__label"></span></div>
+  <div class="cursor-dot" aria-hidden="true"></div>
+
+  <!-- Navegação -->
+  <header class="nav">
+    <a href="#top" class="nav__logo" data-scroll><span class="copy">©</span> Code by Felipe</a>
+    <nav class="nav__links" aria-label="Principal">
+      <a href="#projetos" class="magnetic" data-scroll><span class="magnetic__inner">Projetos</span></a>
+      <a href="#carreira" class="magnetic" data-scroll><span class="magnetic__inner">Carreira</span></a>
+      <a href="#sobre" class="magnetic" data-scroll><span class="magnetic__inner">Sobre</span></a>
+      <a href="#contato" class="magnetic" data-scroll><span class="magnetic__inner">Contato</span></a>
+      <a href="#" class="pill pill--sun magnetic" data-world><span class="magnetic__inner">Ver em 3D</span></a>
+    </nav>
+  </header>
+
+  <button class="fab magnetic" aria-label="Abrir menu" aria-expanded="false" data-menu-toggle><span></span></button>
+  <div class="menu-scrim" data-menu-toggle></div>
+  <aside class="menu" aria-label="Menu">
+    <div>
+      <div class="menu__label">Navegação</div>
+      <nav class="menu__links">
+        <a href="#top" data-scroll>Início</a>
+        <a href="#projetos" data-scroll>Projetos</a>
+        <a href="#carreira" data-scroll>Carreira</a>
+                <a href="#sobre" data-scroll>Sobre</a>
+        <a href="#contato" data-scroll>Contato</a>
+      </nav>
+    </div>
+    <div>
+      <div class="menu__label">Redes</div>
+      <div class="menu__social">
+        <a href="https://www.linkedin.com/in/felipe-furlan-" target="_blank" rel="noreferrer">LinkedIn</a>
+        <a href="https://github.com/lipefurlan" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="mailto:felipe.furlan.eng@gmail.com">E-mail</a>
+        <a href="#" data-world>Mundo 3D</a>
+      </div>
+    </div>
+  </aside>
+
+  <main id="top">
+
+    <!-- HERO: nome gigante em marquee + cards inclinados -->
+    <section class="hero" data-cursor-hide>
+      <div class="hero__top">
+        <p class="hero__intro" data-reveal>
+          <strong>Developer, engineer, project leader.</strong>
+          Construo produtos full-stack que vão pra produção, hoje como R&amp;D Intern na Motorola, a partir de Americana, SP.
+        </p>
+        <div class="hero__badge" data-reveal>
+          <img src="img/felipe.webp" alt="Foto do Felipe" width="40" height="40" />
+          <span>Engenharia da Computação · FACAMP</span>
+          <span class="live" title="Disponível para projetos"></span>
+        </div>
+      </div>
+
+      <div class="cards" data-cards>
+        <a class="card" href="#projetos" data-scroll style="background:#3e9b80" data-cursor="Ver">
+          <span class="card__shape" style="background:#ffe46b"></span>
+          <span class="card__inner"><span class="card__meta"><span>01</span><span>SaaS · IA</span></span><span class="card__name">Cerchia</span></span>
+        </a>
+        <a class="card" href="#projetos" data-scroll style="background:#4aa7c9" data-cursor="Ver">
+          <span class="card__shape" style="background:#fff"></span>
+          <span class="card__inner"><span class="card__meta"><span>02</span><span>Flutter</span></span><span class="card__name">UniHub</span></span>
+        </a>
+        <a class="card card--photo" href="#carreira" data-scroll data-cursor="Ver">
+          <img src="img/feira-2025.webp" alt="" />
+          <span class="card__inner"><span class="card__meta"><span>DCE</span><span>2025</span></span><span class="card__name">+1.000 pessoas</span></span>
+        </a>
+        <a class="card" href="#carreira" data-scroll style="background:#1f3a2e" data-cursor="Ver">
+          <span class="card__shape" style="background:#ff7a6b"></span>
+          <span class="card__inner"><span class="card__meta"><span>Agora</span><span>R&amp;D</span></span><span class="card__name">Motorola</span></span>
+        </a>
+        <a class="card" href="#projetos" data-scroll style="background:#e3a14a" data-cursor="Ver">
+          <span class="card__shape" style="background:#fff"></span>
+          <span class="card__inner"><span class="card__meta"><span>03</span><span>PWA · NFC</span></span><span class="card__name">Tigela</span></span>
+        </a>
+        <a class="card card--photo" href="#sobre" data-scroll data-cursor="Ver">
+          <img src="img/ironman.webp" alt="" />
+          <span class="card__inner"><span class="card__meta"><span>70.3</span><span>2024</span></span><span class="card__name">Triatleta</span></span>
+        </a>
+      </div>
+
+      <div class="marquee" aria-label="Felipe Furlan">
+        <div class="marquee__track" data-marquee>
+          <span class="marquee__item">Felipe Furlan</span><span class="marquee__item" aria-hidden="true">Felipe Furlan</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Statement -->
+    <section class="statement">
+      <p class="statement__text" data-words>
+        Entendo o problema antes de escrever a solução. Da liderança estudantil no DCE a um sistema que substituiu 400 planilhas na Motorola, construo produtos que pessoas reais usam.
+      </p>
+      <div class="statement__side">
+        <p>Full-stack com Angular, TypeScript, Java, Spring Boot, Python e FastAPI. Visão computacional e dados aplicados à indústria. E muita gestão de gente e eventos no caminho.</p>
+        <a href="#sobre" class="magnetic" data-scroll><span class="magnetic__inner round-btn">Sobre mim</span></a>
+      </div>
+    </section>
+
+    <!-- Projetos e sites: vitrine fixada estilo Robin Noguier -->
+    <section class="show" id="projetos">
+      <div class="show__pin" data-show>
+        <div class="show__left">
+          <div class="eyebrow">Projetos e sites · <span data-show-count>01</span>/<span data-show-total>07</span></div>
+          <div class="show__items">
+            <article class="show__item" style="--c:#2f8f73">
+              <h3 class="show__title">Cerchia</h3>
+              <p>Vendedor de IA e programa de fidelidade dentro do WhatsApp para pequenos lojistas. O saldo de pontos é um livro-razão imutável, feito para 60 mil clientes.</p>
+              <a class="show__link" href="https://cerchia.com.br" target="_blank" rel="noreferrer" data-cursor="Abrir">Abrir o site <span>&rarr;</span></a>
+            </article>
+            <article class="show__item" style="--c:#2f93b8">
+              <h3 class="show__title">UniHub</h3>
+              <p>Um "Wellhub para estudantes": check-in em academias parceiras, painel da academia e backoffice de operação. Flutter, FastAPI e PostgreSQL.</p>
+              <a class="show__link" href="https://app.felipefurlan.com.br" target="_blank" rel="noreferrer" data-cursor="Abrir">Testar o app <span>&rarr;</span></a>
+            </article>
+            <article class="show__item" style="--c:#d98d2b">
+              <h3 class="show__title">Tigela</h3>
+              <p>PWA multi-família para registrar quem alimentou cada pet. Encosta o celular no adesivo NFC e a família inteira recebe o aviso.</p>
+              <a class="show__link" href="https://tigela.felipefurlan.com.br" target="_blank" rel="noreferrer" data-cursor="Abrir">Testar o app <span>&rarr;</span></a>
+            </article>
+            <article class="show__item" style="--c:#2f5c8f">
+              <h3 class="show__title">Cadê o Carro</h3>
+              <p>Controle de frota com tags NFC. Cada carro tem uma tag; ao encostar, o app abre a página do veículo para retirada, devolução ou abastecimento.</p>
+              <a class="show__link" href="#contato" data-scroll data-cursor="Saber mais">Pedir uma demo <span>&rarr;</span></a>
+            </article>
+            <article class="show__item" style="--c:#7a68c9">
+              <h3 class="show__title">Visão Computacional</h3>
+              <p>Detecção de defeitos em peças injetadas para a Amanco Wavin, via CITEC FACAMP. YOLOv8 com mAP@0.5 de 88,6% em amostras reais de produção.</p>
+              <a class="show__link" href="#carreira" data-scroll data-cursor="Ver">Ver na carreira <span>&rarr;</span></a>
+            </article>
+            <article class="show__item" style="--c:#ef6a5a">
+              <h3 class="show__title">Site do DCE</h3>
+              <p>Site institucional do Diretório Central dos Estudantes da FACAMP, a vitrine dos eventos, visitas técnicas e da Feira de Carreiras.</p>
+              <a class="show__link" href="#contato" data-scroll data-cursor="Ver site" data-dce-link>Ver o site <span>&rarr;</span></a>
+            </article>
+            <article class="show__item" style="--c:#1f3a2e">
+              <h3 class="show__title">Seu site aqui</h3>
+              <p>Também faço sites para outras pessoas e negócios. Este espaço está esperando o próximo projeto.</p>
+              <a class="show__link" href="#contato" data-scroll data-cursor="Vamos?">Vamos conversar <span>&rarr;</span></a>
+            </article>
+          </div>
+          <div class="show__thumbs" aria-hidden="true"></div>
+        </div>
+
+        <div class="show__right" aria-hidden="true">
+          <div class="show__stack" data-show-stack>
+            <div class="panel"><div class="art art--app" style="--a:#3e9b80;--b:#ffe46b"><div class="art__phone"><i></i><b>Cerchia</b><span></span><span></span><em>+120 moedas</em></div><div class="art__bubble">Oi! Quer ver o catálogo?</div></div></div>
+            <div class="panel"><div class="art art--app" style="--a:#4aa7c9;--b:#ffffff"><div class="art__phone"><i></i><b>UniHub</b><span></span><span></span><em>Check-in feito</em></div><div class="art__bubble">Academia parceira · 2 km</div></div></div>
+            <div class="panel"><div class="art art--app" style="--a:#e3a14a;--b:#fff4dc"><div class="art__phone"><i></i><b>Tigela</b><span></span><span></span><em>Rex comeu às 8h</em></div><div class="art__bubble">NFC · toque para registrar</div></div></div>
+            <div class="panel"><div class="art art--app" style="--a:#2f5c8f;--b:#79b4dc"><div class="art__phone"><i></i><b>Frota</b><span></span><span></span><em>Retirada registrada</em></div><div class="art__bubble">Fiat Strada · tanque 3/4</div></div></div>
+            <div class="panel"><div class="art art--cv"><span class="box" style="left:14%;top:22%;width:30%;height:34%"><small>defeito 0.92</small></span><span class="box box--ok" style="left:54%;top:46%;width:28%;height:32%"><small>ok 0.97</small></span><b>mAP@0.5 88,6%</b></div></div>
+            <div class="panel"><div class="art art--photo"><img src="img/feira-2025.webp" alt="" loading="lazy" /><div class="art__bar"><i></i><i></i><i></i><span>dce.facamp</span></div></div></div>
+            <div class="panel"><div class="art art--empty"><b>Seu site<br/><span class="serif">aqui</span></b></div></div>
+          </div>
+        </div>
+
+        <nav class="show__dots" aria-label="Projetos" data-show-dots></nav>
+      </div>
+    </section>
+
+    <!-- Carreira: rolagem horizontal -->
+    <section class="career" id="carreira">
+      <div class="career__pin" data-career>
+        <div class="career__intro">
+          <div><div class="eyebrow">Estrada da Carreira</div><h2>De 2022 até hoje</h2></div>
+          <p>Sete marcos, em ordem. Role para seguir a estrada.</p>
+        </div>
+        <div class="career__track" data-career-track>
+          <article class="mile"><div><div class="mile__when">2022</div><h3>FACAMP</h3></div><p>Entrada em Engenharia da Computação. O começo de tudo.</p><div class="mile__role">Graduação</div></article>
+          <article class="mile"><div><div class="mile__when">Mar/2023 – Ago/2025</div><h3>DCE FACAMP</h3></div><p>1º Fórum das Engenharias com a 3M, visitas técnicas (XP, Ambev, Agibank, Karcher) e Feira de Carreiras para mais de 1.000 pessoas.</p><div class="mile__role">Vice-presidente e diretorias</div></article>
+          <article class="mile"><div><div class="mile__when">Mai/2023 – Jul/2025</div><h3>InterFacamp</h3></div><p>Organização geral dos Jogos Universitários: estatutos, regulamentos, segurança e integração entre instituições.</p><div class="mile__role">Presidente da comissão</div></article>
+          <article class="mile"><div><div class="mile__when">Fev/2025 – Dez/2025</div><h3>CITEC · Amanco Wavin</h3></div><p>Visão computacional com YOLOv8 para defeitos em peças injetadas: mAP@0.5 de 88,6% e F1 de 0,88.</p><div class="mile__role">Pesquisador</div></article>
+          <article class="mile"><div><div class="mile__when">Fev/2025 – Dez/2025</div><h3>CEAF · ArcelorMittal Gonvarri</h3></div><p>Mapeamento de processos com BPMN e MFV para reduzir lead time e setup.</p><div class="mile__role">Parceria acadêmica</div></article>
+          <article class="mile"><div><div class="mile__when">Jun/2025</div><h3>FATECLOG</h3></div><p>Apresentação sobre IA + ERP para operações inbound no maior congresso de logística do Brasil.</p><div class="mile__role">Palestrante</div></article>
+          <article class="mile mile--now"><div><div class="mile__when">Dez/2025 – Atual</div><h3>Motorola Mobility</h3></div><p>Módulo de consolidação de custos na plataforma global de PLCM: 200+ produtos e 400+ planilhas viraram um sistema só. Em produção desde ago/2026.</p><div class="mile__role">R&amp;D Intern · Angular, Java, BigQuery</div></article>
+        </div>
+        <div class="career__bar"><i data-career-bar></i></div>
+      </div>
+    </section>
+
+    <!-- Sobre -->
+    <section class="about" id="sobre">
+      <div class="about__photo"><img src="img/felipe.webp" alt="Felipe Furlan" data-parallax /></div>
+      <div>
+        <div class="eyebrow">Sobre mim</div>
+        <h2>Gestão me ensinou a ouvir. <span class="serif">Código</span> me deu como resolver.</h2>
+        <p>Entrei na faculdade em 2022 pela engenharia e, ao longo do curso, assumi a liderança de iniciativas acadêmicas de alto impacto, conectando alunos, empresas e profissionais. Essa passagem pela gestão me deu algo que uso todo dia como desenvolvedor: entender o problema antes de escrever a solução.</p>
+        <p>Em 2025 entrei em projetos de visão operacional com a indústria de injeção plástica, o que consolidou minha atuação técnica e me levou ao desenvolvimento full-stack na Motorola. Fora da faculdade, sou triatleta amador.</p>
+        <div class="skills">
+          <div><h3>Tecnologias</h3><div class="chips">
+            <span class="chip">TypeScript</span><span class="chip">Angular</span><span class="chip">React</span><span class="chip">Java</span><span class="chip">Spring Boot</span><span class="chip">Python</span><span class="chip">FastAPI</span><span class="chip">Flutter</span><span class="chip">PostgreSQL</span><span class="chip">BigQuery</span><span class="chip">OpenCV</span><span class="chip">YOLOv8</span>
+          </div></div>
+          <div><h3>Gestão</h3><div class="chips">
+            <span class="chip">Liderança de equipes</span><span class="chip">Gestão de projetos</span><span class="chip">Negociação</span><span class="chip">Eventos</span><span class="chip">BPMN</span><span class="chip">Planejamento</span>
+          </div></div>
+          <div><h3>Idiomas</h3><div class="chips"><span class="chip">Inglês avançado</span><span class="chip">Espanhol intermediário</span></div></div>
+          <div><h3>Base</h3><div class="chips"><span class="chip">Americana, SP</span><span class="chip">FACAMP</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Triatlo -->
+    <section class="tri">
+      <div class="tri__box">
+        <div><div class="eyebrow" style="color:#10283a">Lado triatleta</div><h2 style="margin-top:14px">Ironman 70.3 SP, 2024</h2><p>Disciplina de treino é o mesmo músculo de entregar projeto.</p></div>
+        <div class="stat"><b data-count="1.9" data-decimals="1">0</b><span>km nadando</span></div>
+        <div class="stat"><b data-count="90">0</b><span>km pedalando</span></div>
+        <div class="stat"><b data-count="21">0</b><span>km correndo</span></div>
+        <svg class="tri__wave" viewBox="0 0 1200 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 20 Q 75 0 150 20 T 300 20 T 450 20 T 600 20 T 750 20 T 900 20 T 1050 20 T 1200 20 V40 H0Z" fill="#10283a"/></svg>
+      </div>
+    </section>
+
+    <!-- Galeria -->
+    <section class="gallery" id="galeria">
+      <div class="head">
+        <div><div class="eyebrow">Galeria</div><h2>Bastidores</h2></div>
+        <p>Feiras, equipes, visitas técnicas e provas. Arraste para o lado.</p>
+      </div>
+      <div class="gallery__strip" data-gallery data-cursor="Arrastar">
+        <button class="shot" data-desc="Organização de feira conectando mais de 1.000 estudantes ao mercado."><div class="shot__img"><img src="img/feira-2025.webp" alt="Feira de Carreiras FACAMP 2025" loading="lazy" /></div><div class="shot__cap"><b>Feira de Carreiras</b><span>2025</span></div></button>
+        <button class="shot" data-desc="Prova de endurance: 1,9 km natação, 90 km ciclismo e 21 km corrida."><div class="shot__img"><img src="img/ironman.webp" alt="Ironman 70.3 SP" loading="lazy" /></div><div class="shot__cap"><b>Ironman 70.3 SP</b><span>2024</span></div></button>
+        <button class="shot" data-desc="Hackathon na sede da Brex, com foco em inovação e problemas reais."><div class="shot__img"><img src="img/brex.webp" alt="Brex Challenge" loading="lazy" /></div><div class="shot__cap"><b>Brex Challenge</b><span>2025</span></div></button>
+        <button class="shot" data-desc="Imersão no centro de inovação da 3M."><div class="shot__img"><img src="img/3m.webp" alt="Visita técnica 3M" loading="lazy" /></div><div class="shot__cap"><b>Visita 3M</b><span>2024</span></div></button>
+        <button class="shot" data-desc="Gestão de equipes e projetos de maior escala no DCE."><div class="shot__img"><img src="img/equipe-2024.webp" alt="Equipe DCE 2024" loading="lazy" /></div><div class="shot__cap"><b>Equipe DCE</b><span>2024</span></div></button>
+        <button class="shot" data-desc="Organização e liderança de evento esportivo universitário."><div class="shot__img"><img src="img/taca-dce-2025.webp" alt="Taça DCE FACAMP 2025" loading="lazy" /></div><div class="shot__cap"><b>Taça DCE</b><span>2025</span></div></button>
+        <button class="shot" data-desc="Planejamento e execução dos jogos universitários."><div class="shot__img"><img src="img/interfacamp-co.webp" alt="Comissão InterFacamp" loading="lazy" /></div><div class="shot__cap"><b>InterFacamp</b><span>2024</span></div></button>
+        <button class="shot" data-desc="Apresentação sobre IA e ERP no congresso de logística."><div class="shot__img"><img src="img/fateclog.webp" alt="FatecLog" loading="lazy" /></div><div class="shot__cap"><b>FATECLOG</b><span>2025</span></div></button>
+        <button class="shot" data-desc="Atuação em liderança estudantil na organização de projetos e eventos."><div class="shot__img"><img src="img/equipe-2023.webp" alt="Equipe DCE 2023" loading="lazy" /></div><div class="shot__cap"><b>Equipe DCE</b><span>2023</span></div></button>
+        <button class="shot" data-desc="Mediação de debates sobre carreira, mercado e formação."><div class="shot__img"><img src="img/roda-conversa.webp" alt="Roda de conversa" loading="lazy" /></div><div class="shot__cap"><b>Roda de Conversa</b><span>2024</span></div></button>
+        <button class="shot" data-desc="Visita técnica ao Agibank."><div class="shot__img"><img src="img/visita-agibank.webp" alt="Visita Agibank" loading="lazy" /></div><div class="shot__cap"><b>Visita Agibank</b><span>2024</span></div></button>
+        <button class="shot" data-desc="Visita técnica à Ambev."><div class="shot__img"><img src="img/visita-ambev.webp" alt="Visita Ambev" loading="lazy" /></div><div class="shot__cap"><b>Visita Ambev</b><span>2024</span></div></button>
+        <button class="shot" data-desc="Representação esportiva da instituição."><div class="shot__img"><img src="img/interfacamp-tenis.webp" alt="InterFacamp tênis" loading="lazy" /></div><div class="shot__cap"><b>Tênis InterFacamp</b><span>2023</span></div></button>
+      </div>
+    </section>
+
+    <!-- Portal para o mundo 3D -->
+    <section class="portal">
+      <div class="portal__box">
+        <div class="portal__copy">
+          <div>
+            <div class="eyebrow">Portal</div>
+            <h2>Prefere <span class="serif">dirigir</span> pelo portfólio?</h2>
+            <p>O mesmo conteúdo existe como um mundo 3D aberto: pegue o carrinho e passeie pelo Distrito dos Projetos, pela Estrada da Carreira e pelo Lago do Triatlo.</p>
+          </div>
+          <div><a href="#" class="pill magnetic" data-world style="border-color:#1f3a2e"><span class="magnetic__inner">Entrar no mundo 3D <span class="dot"></span></span></a></div>
+        </div>
+        <div class="portal__canvas" data-car-canvas data-cursor="Girar"><span class="portal__hint">Arraste para girar</span></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Contato -->
+  <footer class="contact" id="contato">
+    <div class="contact__head">
+      <img src="img/felipe.webp" alt="" />
+      <h2>Vamos <span class="serif">conversar</span></h2>
+    </div>
+    <div class="contact__line">
+      <a href="mailto:felipe.furlan.eng@gmail.com" class="magnetic" data-strength="0.5"><span class="magnetic__inner round-btn">Fale comigo</span></a>
+    </div>
+    <div class="contact__pills">
+      <button class="pill magnetic" data-copy="felipe.furlan.eng@gmail.com"><span class="magnetic__inner">felipe.furlan.eng@gmail.com</span></button>
+      <a class="pill magnetic" href="tel:+5519997396199"><span class="magnetic__inner">+55 19 99739-6199</span></a>
+    </div>
+    <div class="contact__foot">
+      <div class="row">
+        <div><small>Versão</small><span>2026 © Felipe Furlan</span></div>
+        <div><small>Hora local</small><span data-clock>--:--</span> <span>Americana, SP</span></div>
+      </div>
+      <div><small>Redes</small>
+        <div class="socials">
+          <a href="https://www.linkedin.com/in/felipe-furlan-" target="_blank" rel="noreferrer">LinkedIn</a>
+          <a href="https://github.com/lipefurlan" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="../en/">English</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="lightbox" data-lightbox role="dialog" aria-modal="true" aria-label="Foto">
+    <button class="lightbox__close" data-lightbox-close aria-label="Fechar">×</button>
+    <figure><img alt="" /><figcaption><b></b><span></span></figcaption></figure>
+  </div>
+  <div class="toast" data-toast>E-mail copiado</div>
+
+  <script src="vendor/gsap.min.js"></script>
+  <script src="vendor/ScrollTrigger.min.js"></script>
+  <script src="vendor/lenis.min.js"></script>
+  <script src="vendor/three.min.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
