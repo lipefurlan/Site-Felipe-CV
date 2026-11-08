@@ -16,15 +16,11 @@
 </head>
 <body class="is-loading">
 
-  <!-- Preloader: palavras + cortina com curva (saída em 0.8s, ease [0.76,0,0.24,1]) -->
+  <!-- Abertura: saudações em várias línguas, depois a cortina sobe com curva -->
   <div class="pre" data-pre aria-hidden="true">
     <p class="pre__word"><span></span><b data-pre-word>Olá</b></p>
     <svg class="pre__curve" preserveAspectRatio="none"><path data-pre-path d=""></path></svg>
   </div>
-
-  <!-- Cursor que acompanha a lista de projetos -->
-  <div class="pcur" data-pcur aria-hidden="true"></div>
-  <div class="pcur pcur--label" data-pcur-label aria-hidden="true">Ver</div>
 
   <header class="nav" data-nav>
     <a href="#top" class="nav__logo" data-scroll><span class="nav__copy">©</span><span class="nav__name"><span>Code by</span><span>Felipe</span></span></a>
@@ -36,7 +32,6 @@
     </nav>
   </header>
 
-  <!-- Botão redondo que aparece ao rolar + menu lateral com curva -->
   <button class="burger" data-burger aria-label="Abrir menu" aria-expanded="false" data-magnetic><span class="burger__bar"></span></button>
   <div class="menu" data-menu aria-hidden="true">
     <svg class="menu__curve" preserveAspectRatio="none"><path data-menu-path d=""></path></svg>
@@ -59,72 +54,70 @@
 
   <main id="top">
 
-    <!-- HERO -->
+    <!-- HERO: nome fixo, texto curto e carrossel de fotos em leque -->
     <section class="hero">
-      <p class="hero__intro" data-slide><b>Developer, engineer, project leader.</b> Construo produtos full-stack que vão para produção. Hoje R&amp;D na Motorola, a partir de Americana, SP.</p>
-      <div class="hero__status" data-slide>
-        <span><i class="dot"></i>Disponível para projetos</span>
-        <span class="hero__local">Americana, SP · <span data-clock>--:--</span> BRT</span>
-      </div>
-
-      <div class="fan" data-fan aria-label="Fotos">
-        <figure class="fan__card"><img src="img/brex.webp" alt="Hackathon na Brex" /></figure>
-        <figure class="fan__card"><img src="img/3m.webp" alt="Visita técnica à 3M" /></figure>
-        <figure class="fan__card"><img src="img/felipe.webp" alt="Felipe Furlan" /></figure>
-        <figure class="fan__card"><img src="img/feira-2025.webp" alt="Feira de Carreiras FACAMP 2025" /></figure>
-        <figure class="fan__card"><img src="img/ironman.webp" alt="Ironman 70.3 SP" /></figure>
-      </div>
-
-      <div class="hero__tag" data-slide>
-        <svg width="18" height="18" viewBox="0 0 9 9" fill="none" aria-hidden="true"><path d="M8 8.5C8.27614 8.5 8.5 8.27614 8.5 8L8.5 3.5C8.5 3.22386 8.27614 3 8 3C7.72386 3 7.5 3.22386 7.5 3.5V7.5H3.5C3.22386 7.5 3 7.72386 3 8C3 8.27614 3.22386 8.5 3.5 8.5L8 8.5ZM0.646447 1.35355L7.64645 8.35355L8.35355 7.64645L1.35355 0.646447L0.646447 1.35355Z" fill="currentColor"/></svg>
-        <span>Full-stack &amp; Visão computacional</span>
-      </div>
-
-      <div class="marquee" aria-label="Felipe Furlan">
-        <div class="marquee__track" data-marquee>
-          <p>Felipe Furlan —</p><p aria-hidden="true">Felipe Furlan —</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- STATEMENT -->
-    <section class="statement">
-      <p class="statement__text" data-words>Entendo o problema antes de escrever a solução. Da liderança no DCE a um sistema que substituiu 400 planilhas na Motorola, construo produtos que pessoas reais usam todos os dias.</p>
-      <div class="statement__side">
-        <p data-fade>Angular, TypeScript, Java, Spring Boot, Python e FastAPI. Visão computacional aplicada à indústria. E gestão de gente e eventos no caminho.</p>
-        <a href="#sobre" class="round round--fill" data-scroll data-magnetic data-strength="0.2"><span>Sobre mim</span></a>
-      </div>
-    </section>
-
-    <!-- PROJETOS: lista + janela que segue o mouse -->
-    <section class="projects" id="projetos" data-projects>
-      <div class="projects__head"><span>Projetos em produção</span><span>06</span></div>
-
-      <div class="projects__list">
-        <a class="row" href="https://cerchia.com.br" target="_blank" rel="noreferrer" data-row="0"><h2>Cerchia</h2><p>IA e fidelidade no WhatsApp · 60 mil clientes</p></a>
-        <a class="row" href="#contato" data-scroll data-row="1" data-dce><h2>Site do DCE</h2><p>Institucional · Feira de Carreiras</p></a>
-        <a class="row" href="#carreira" data-scroll data-row="2"><h2>Visão computacional</h2><p>YOLOv8 · mAP@0.5 de 88,6% · Amanco Wavin</p></a>
-        <a class="row" href="https://tigela.felipefurlan.com.br" target="_blank" rel="noreferrer" data-row="3"><h2>Apps para a família</h2><p>Tigela e Cadê o Carro · PWAs com NFC · React &amp; FastAPI</p></a>
-        <a class="row" href="https://app.felipefurlan.com.br" target="_blank" rel="noreferrer" data-row="4"><h2>UniHub</h2><p>App · painel · backoffice · Flutter &amp; FastAPI</p></a>
-        <a class="row" href="#contato" data-scroll data-row="5"><h2>Seu site aqui</h2><p>Também faço sites para outras pessoas</p></a>
-      </div>
-
-      <!-- janela fixa 400×350; a pilha sobe index*-100% em 0.5s cubic-bezier(.76,0,.24,1) -->
-      <div class="modal" data-modal aria-hidden="true">
-        <div class="modal__stack" data-modal-stack>
-          <div class="modal__item" style="background:#e9ecef"><div class="modal__soon">cerchia.com.br</div></div>
-          <div class="modal__item" style="background:#e1dad6"><img src="img/feira-2025.webp" alt="" /></div>
-          <div class="modal__item" style="background:#d7d4cf"><img src="img/equipe-2024.webp" alt="" /></div>
-          <div class="modal__item modal__item--pair" style="background:#e3efe8"><img class="modal__phone" src="img/app-tigela-m.webp" alt="" /><img class="modal__phone" src="img/app-cadeocarro-m.webp" alt="" /></div>
-          <div class="modal__item" style="background:#e3e5e7"><div class="modal__soon">app.felipefurlan.com.br</div></div>
-          <div class="modal__item" style="background:#0a0a0a"><div class="modal__soon modal__soon--light">o próximo é o seu</div></div>
+      <div class="hero__top">
+        <h1 class="hero__name" data-words>Felipe Furlan</h1>
+        <div class="hero__side">
+          <p class="hero__intro" data-slide><b>Developer, engineer, project leader.</b> Full-stack em produção na Motorola, engenharia da computação pela FACAMP, a partir de Americana, SP.</p>
+          <p class="hero__status" data-slide><i class="dot"></i>Disponível para projetos · <span data-clock>--:--</span> BRT</p>
         </div>
       </div>
 
-      <div class="projects__more"><a href="https://github.com/lipefurlan" target="_blank" rel="noreferrer" class="round" data-magnetic data-strength="0.25"><span>Mais no GitHub</span><i class="round__fill"></i></a></div>
+      <div class="fan" data-fan aria-roledescription="carrossel" aria-label="Fotos" tabindex="0">
+        <figure class="fan__card" data-cap="Hackathon na Brex · 2025"><img src="img/brex.webp" alt="Hackathon na Brex" /></figure>
+        <figure class="fan__card" data-cap="Visita técnica à 3M · 2024"><img src="img/3m.webp" alt="Visita técnica à 3M" /></figure>
+        <figure class="fan__card" data-cap="Feira de Carreiras FACAMP · 2025"><img src="img/felipe.webp" alt="Felipe Furlan" /></figure>
+        <figure class="fan__card" data-cap="Equipe da Feira de Carreiras · 2025"><img src="img/feira-2025.webp" alt="Equipe da Feira de Carreiras" /></figure>
+        <figure class="fan__card" data-cap="Ironman 70.3 São Paulo · 2024"><img src="img/ironman.webp" alt="Ironman 70.3 SP" /></figure>
+      </div>
+
+      <div class="hero__ctrl" data-slide>
+        <button class="arrow" data-fan-prev aria-label="Foto anterior" data-magnetic data-strength="0.25"><span>←</span></button>
+        <span class="hero__cap" data-fan-cap>Feira de Carreiras FACAMP · 2025</span>
+        <button class="arrow" data-fan-next aria-label="Próxima foto" data-magnetic data-strength="0.25"><span>→</span></button>
+      </div>
     </section>
 
-    <!-- FAIXA DE IMAGENS: duas fileiras deslizam com o scroll (±150px) -->
+    <!-- PROJETOS: vitrine fixada; o scroll troca título, texto e imagens inclinadas -->
+    <section class="show" id="projetos" data-show>
+      <div class="show__pin">
+        <div class="show__left">
+          <div class="show__count"><b data-show-i>01</b> / 06</div>
+          <div class="show__titles" data-show-titles>
+            <h2 style="--c:#1f6f4a">Cerchia</h2>
+            <h2 style="--c:#c2410c">Site do DCE</h2>
+            <h2 style="--c:#6d28d9">Visão computacional</h2>
+            <h2 style="--c:#0f766e">Apps para a família</h2>
+            <h2 style="--c:#1d4ed8">UniHub</h2>
+            <h2 style="--c:#0a0a0a">Seu site aqui</h2>
+          </div>
+          <div class="show__texts" data-show-texts>
+            <div><p>Vendedor de IA e programa de fidelidade dentro do WhatsApp para pequenos lojistas. O saldo de pontos é um livro-razão imutável, feito para 60 mil clientes.</p><a href="https://cerchia.com.br" target="_blank" rel="noreferrer">Abrir cerchia.com.br →</a></div>
+            <div><p>Site institucional do Diretório Central dos Estudantes da FACAMP: a vitrine dos eventos, das visitas técnicas e da Feira de Carreiras para mais de 1.000 pessoas.</p><a href="#contato" data-scroll data-dce>Ver o site →</a></div>
+            <div><p>Detecção de defeitos em peças injetadas para a Amanco Wavin, via CITEC FACAMP. YOLOv8 com mAP@0.5 de 88,6% e F1 de 0,88 em amostras reais de produção.</p><a href="#carreira" data-scroll>Ver na carreira →</a></div>
+            <div><p>Tigela registra quem alimentou cada pet e avisa a casa inteira; Cadê o Carro controla a frota encostando o celular na tag NFC. React, FastAPI e PostgreSQL, em uso todo dia.</p><a href="https://tigela.felipefurlan.com.br" target="_blank" rel="noreferrer">Abrir a Tigela →</a></div>
+            <div><p>Um "Wellhub para estudantes": check-in em academias parceiras, painel da academia e backoffice de operação. Flutter, FastAPI e PostgreSQL.</p><a href="https://app.felipefurlan.com.br" target="_blank" rel="noreferrer">Testar o app →</a></div>
+            <div><p>Também faço sites e sistemas para outras pessoas e negócios. Este espaço está esperando o próximo projeto.</p><a href="#contato" data-scroll>Vamos conversar →</a></div>
+          </div>
+        </div>
+
+        <div class="show__right" aria-hidden="true">
+          <div class="show__stack" data-show-stack>
+            <div class="panel panel--text" style="background:#1f6f4a"><span>cerchia.com.br</span><small>print em coleta</small></div>
+            <div class="panel"><img src="img/feira-2025.webp" alt="" /></div>
+            <div class="panel"><img src="img/equipe-2024.webp" alt="" /></div>
+            <div class="panel panel--pair" style="background:#e3efe8"><img src="img/app-tigela-m.webp" alt="" /><img src="img/app-cadeocarro-m.webp" alt="" /></div>
+            <div class="panel panel--text" style="background:#1d4ed8"><span>app.felipefurlan.com.br</span><small>print em coleta</small></div>
+            <div class="panel panel--text" style="background:#0a0a0a"><span>o próximo pode ser o seu</span></div>
+          </div>
+        </div>
+
+        <nav class="show__dots" aria-label="Projetos" data-show-dots></nav>
+      </div>
+    </section>
+
+    <!-- FAIXA DE IMAGENS -->
     <section class="slides" data-slides>
       <div class="slides__row" data-slides-a>
         <div class="tile" style="background:#e3e5e7"><img src="img/feira-2025.webp" alt="Feira de Carreiras 2025" loading="lazy" /></div>
@@ -141,7 +134,7 @@
       <div class="slides__curve" data-slides-curve><div></div></div>
     </section>
 
-    <!-- CARREIRA: uma linha só; a seção fixa e o scroll corre a linha -->
+    <!-- CARREIRA -->
     <section class="career" id="carreira" data-career>
       <div class="career__pin">
         <div class="career__head">
@@ -186,12 +179,12 @@
       <div class="contact__line2">
         <h2 data-words>juntos</h2>
         <div class="contact__rule"></div>
-        <a href="mailto:felipe.furlan.eng@gmail.com" class="round round--fill contact__cta" data-magnetic data-strength="0.3"><span>Fale comigo</span></a>
+        <a href="mailto:felipe.furlan.eng@gmail.com" class="pill pill--dark contact__cta" data-magnetic data-strength="0.3"><span>Fale comigo →</span></a>
       </div>
     </div>
     <div class="contact__pills">
-      <button class="pill" data-copy="felipe.furlan.eng@gmail.com" data-magnetic data-strength="0.2"><span>felipe.furlan.eng@gmail.com</span><i class="round__fill"></i></button>
-      <a class="pill" href="tel:+5519997396199" data-magnetic data-strength="0.2"><span>+55 19 99739-6199</span><i class="round__fill"></i></a>
+      <button class="pill" data-copy="felipe.furlan.eng@gmail.com" data-magnetic data-strength="0.2"><span>felipe.furlan.eng@gmail.com</span><i class="pill__fill"></i></button>
+      <a class="pill" href="tel:+5519997396199" data-magnetic data-strength="0.2"><span>+55 19 99739-6199</span><i class="pill__fill"></i></a>
     </div>
     <div class="contact__foot">
       <div class="contact__cols">

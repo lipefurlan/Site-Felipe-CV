@@ -4,7 +4,7 @@
    - entrada de texto: y 40→0 em 0.6s, ease [0.33,1,0.68,1] (Dennis Snellenberg)
    - preloader: cortina sobe em 0.8s, ease [0.76,0,0.24,1] (Olivier Larose)
    - magnético: 35% do deslocamento do mouse, elastic.out(1, 0.3)
-   - janela da lista: quickTo 0.8s power3, pilha sobe em 0.5s [0.76,0,0.24,1]
+   - vitrine: seção fixa, scroll troca o projeto e desliza a pilha inclinada (Robin Noguier)
 */
 
 const WORLD_URL = null; // endereço do mundo 3D, quando estiver no ar
@@ -15,17 +15,10 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
 const isDesktop = () => matchMedia('(min-width: 901px)').matches;
-const EASE_OUT = 'cubic-bezier(0.33, 1, 0.68, 1)';
-const EASE_IO = 'cubic-bezier(0.76, 0, 0.24, 1)';
 
 gsap.registerPlugin(ScrollTrigger);
-if (window.CustomEase) {
-  CustomEase.create('out', '0.33,1,0.68,1');
-  CustomEase.create('io', '0.76,0,0.24,1');
-}
-// Sem o plugin CustomEase: aproximações nativas do GSAP
-const outEase = window.CustomEase ? 'out' : 'power3.out';
-const ioEase = window.CustomEase ? 'io' : 'power4.inOut';
+const outEase = 'power3.out';
+const ioEase = 'power4.inOut';
 
 /* ---------- Smooth scroll ---------- */
 let lenis = null;
@@ -77,30 +70,30 @@ function splitWords(el, masked) {
   return $$('.w', el);
 }
 
-/* ---------- Preloader ---------- */
+/* ---------- Abertura: saudações ---------- */
 function runPreloader() {
   const pre = $('[data-pre]');
   if (reduce) { pre.remove(); document.body.classList.remove('is-loading'); return Promise.resolve(); }
   const word = $('[data-pre-word]');
   const path = $('[data-pre-path]');
-  const words = ['Olá', 'Hello', 'Hola', 'Ciao', 'Bonjour', 'こんにちは', 'Hallo', 'Olá'];
+  const words = ['Olá', 'Hello', 'Hola', 'Ciao', 'Bonjour', 'Hallo', 'こんにちは', 'Olá'];
   const W = innerWidth, H = innerHeight;
   const initial = `M0 0 L${W} 0 L${W} ${H} Q${W / 2} ${H + 300} 0 ${H} L0 0`;
   const target = `M0 0 L${W} 0 L${W} ${H} Q${W / 2} ${H} 0 ${H} L0 0`;
   path.setAttribute('d', initial);
   Object.assign(pre.querySelector('svg').style, { top: 0, height: H + 300 + 'px' });
 
-  gsap.to('.pre__word', { opacity: 0.75, duration: 1, delay: 0.2 });
+  gsap.to('.pre__word', { opacity: 1, duration: 0.6, delay: 0.1 });
   let i = 0;
   const step = () => {
     if (i >= words.length - 1) return;
     i += 1; word.textContent = words[i];
-    setTimeout(step, 150);
+    setTimeout(step, 230);
   };
-  setTimeout(step, 1000);
+  setTimeout(step, 800);
 
   return new Promise((res) => {
-    const tl = gsap.timeline({ delay: 2.2 });
+    const tl = gsap.timeline({ delay: 2.6 });
     tl.to(path, { attr: { d: target }, duration: 0.7, ease: ioEase, delay: 0.3 }, 0)
       .to(pre, { yPercent: -100, duration: 0.8, ease: ioEase, delay: 0.2 }, 0)
       .add(() => { document.body.classList.remove('is-loading'); res(); }, 0.5)
@@ -123,9 +116,9 @@ if (fine && !reduce) {
   });
 }
 
-/* ---------- Botões com círculo que enche ---------- */
-$$('.round, .pill').forEach((btn) => {
-  const circle = $('.round__fill', btn);
+/* ---------- Pílulas com círculo que enche ---------- */
+$$('.pill').forEach((btn) => {
+  const circle = $('.pill__fill', btn);
   if (!circle || reduce) return;
   const tl = gsap.timeline({ paused: true });
   tl.to(circle, { top: '-25%', width: '150%', duration: 0.4, ease: 'power3.in' }, 'enter')
@@ -174,47 +167,71 @@ ScrollTrigger.create({
   onEnter: () => burger.classList.add('is-on'),
   onLeaveBack: () => { burger.classList.remove('is-on'); closeMenu(); },
 });
-// No celular, o botão fica sempre disponível
 if (!isDesktop()) burger.classList.add('is-on');
 
-/* ---------- Hero ---------- */
-const marqueeTrack = $('[data-marquee]');
-const marqueeP = $$('p', marqueeTrack);
-let xPercent = 0;
-let direction = -1;
-function marqueeLoop() {
-  if (xPercent < -100) xPercent = 0;
-  else if (xPercent > 0) xPercent = -100;
-  gsap.set(marqueeP, { xPercent });
-  xPercent += 0.08 * direction;
-  requestAnimationFrame(marqueeLoop);
-}
-if (!reduce) {
-  gsap.to(marqueeTrack, {
-    x: '-500px',
-    scrollTrigger: { trigger: document.documentElement, scrub: 0.25, start: 0, end: innerHeight, onUpdate: (e) => (direction = e.direction * -1) },
+/* ---------- Hero: carrossel em leque ---------- */
+const fan = $('[data-fan]');
+const fanCards = $$('.fan__card', fan);
+const fanCap = $('[data-fan-cap]');
+let fanIndex = 2; // qual foto está no centro
+// cinco "assentos": deslocamento horizontal (vw), vertical (%), rotação, escala e camada
+const SEATS = [
+  { x: -36, y: 24, r: -12, s: 0.92, z: 1 },
+  { x: -19, y: 10, r: -6, s: 0.96, z: 2 },
+  { x: 0, y: 0, r: -1, s: 1.08, z: 3 },
+  { x: 19, y: 8, r: 5, s: 0.96, z: 2 },
+  { x: 36, y: 22, r: 11, s: 0.92, z: 1 },
+];
+const seatOf = (i) => (((i - fanIndex) % fanCards.length) + fanCards.length + 2) % fanCards.length; // 2 = centro
+function layoutFan(animate = true) {
+  const vw = innerWidth / 100;
+  const narrow = innerWidth <= 900;
+  fanCards.forEach((card, i) => {
+    const seat = SEATS[seatOf(i)];
+    const x = (narrow ? seat.x * 0.85 : seat.x) * vw;
+    const props = { xPercent: -50, x, yPercent: seat.y, rotate: seat.r, scale: seat.s, zIndex: seat.z, opacity: narrow && seat.z === 1 ? 0 : 1 };
+    if (animate && !reduce) gsap.to(card, { ...props, duration: 0.9, ease: 'power3.out' });
+    else gsap.set(card, props);
   });
-  requestAnimationFrame(marqueeLoop);
+  fanCap.textContent = fanCards[fanIndex].dataset.cap;
 }
+function fanGo(dir) { fanIndex = (fanIndex + dir + fanCards.length) % fanCards.length; layoutFan(); }
+layoutFan(false);
+let autoFan = reduce ? null : setInterval(() => fanGo(1), 4500);
+const stopAuto = () => { if (autoFan) { clearInterval(autoFan); autoFan = null; } };
+$('[data-fan-prev]').addEventListener('click', () => { stopAuto(); fanGo(-1); });
+$('[data-fan-next]').addEventListener('click', () => { stopAuto(); fanGo(1); });
+fanCards.forEach((c, i) => c.addEventListener('click', () => { stopAuto(); if (i !== fanIndex) { fanIndex = i; layoutFan(); } }));
+fan.addEventListener('keydown', (e) => { if (e.key === 'ArrowLeft') { stopAuto(); fanGo(-1); } if (e.key === 'ArrowRight') { stopAuto(); fanGo(1); } });
+// roda do mouse na horizontal (trackpad ou shift+roda) gira o leque
+let wheelLock = 0;
+fan.addEventListener('wheel', (e) => {
+  const dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : (e.shiftKey ? e.deltaY : 0);
+  if (!dx) return;
+  e.preventDefault();
+  const now = Date.now();
+  if (now - wheelLock < 500) return;
+  wheelLock = now; stopAuto(); fanGo(dx > 0 ? 1 : -1);
+}, { passive: false });
+// arrastar
+let dragX = null;
+fan.addEventListener('pointerdown', (e) => { dragX = e.clientX; fan.setPointerCapture(e.pointerId); });
+fan.addEventListener('pointerup', (e) => {
+  if (dragX === null) return;
+  const d = e.clientX - dragX; dragX = null;
+  if (Math.abs(d) > 40) { stopAuto(); fanGo(d < 0 ? 1 : -1); }
+});
+addEventListener('resize', () => layoutFan(false));
 
 function heroIntro() {
   if (reduce) return;
-  gsap.from('.fan__card', {
-    y: 160, opacity: 0, rotate: 0, duration: 1.2, ease: 'power4.out', stagger: { each: 0.07, from: 'center' },
-    clearProps: 'opacity',
-  });
+  gsap.from(fanCards, { y: 200, opacity: 0, duration: 1.2, ease: 'power4.out', stagger: { each: 0.07, from: 'center' }, clearProps: 'opacity' });
   gsap.to('[data-slide]', { y: 0, opacity: 1, duration: 0.6, ease: outEase, stagger: 0.08, delay: 0.2 });
-  gsap.from('.marquee__track p', { yPercent: 100, duration: 0.9, ease: outEase, delay: 0.25 });
-}
-
-// paralaxe suave das fotos do hero ao rolar
-if (!reduce) {
-  $$('.fan__card').forEach((c, i) => {
-    gsap.to(c, { y: (i % 2 ? -60 : -120) + 'px', ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
-  });
+  gsap.to($$('.hero__name .w'), { y: 0, duration: 0.8, ease: outEase, stagger: 0.06 });
 }
 
 /* ---------- Reveals ---------- */
+splitWords($('.hero__name'), true);
 $$('[data-fade]').forEach((el) => {
   if (reduce) return;
   gsap.to(el, { y: 0, opacity: 1, duration: 0.6, ease: outEase, scrollTrigger: { trigger: el, start: 'top 88%' } });
@@ -224,53 +241,61 @@ $$('h2[data-words]').forEach((el) => {
   if (reduce) return;
   gsap.to(words, { y: 0, duration: 0.7, ease: outEase, stagger: 0.03, scrollTrigger: { trigger: el, start: 'top 85%' } });
 });
-// Statement: cada palavra acende conforme o scroll avança
+
+/* ---------- Vitrine de projetos: seção fixa, scroll troca o projeto ---------- */
 (() => {
-  const el = $('.statement__text');
-  if (!el) return;
-  const words = splitWords(el, false);
-  if (reduce) { words.forEach((w) => w.classList.add('is-on')); return; }
-  ScrollTrigger.create({
-    trigger: el, start: 'top 80%', end: 'bottom 55%', scrub: true,
-    onUpdate: (st) => {
-      const n = Math.round(st.progress * words.length);
-      words.forEach((w, i) => w.classList.toggle('is-on', i < n));
+  const sec = $('[data-show]');
+  const titles = $$('h2', $('[data-show-titles]'));
+  const texts = $$(':scope > div', $('[data-show-texts]'));
+  const stack = $('[data-show-stack]');
+  const panels = $$('.panel', stack);
+  const dots = $('[data-show-dots]');
+  const counter = $('[data-show-i]');
+  const n = titles.length;
+  let current = -1;
+  titles.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.setAttribute('aria-label', `Projeto ${i + 1}`);
+    b.addEventListener('click', () => goTo(i));
+    dots.appendChild(b);
+  });
+  const dotEls = $$('button', dots);
+  const setActive = (i) => {
+    if (i === current) return;
+    current = i;
+    titles.forEach((t, k) => t.classList.toggle('is-on', k === i));
+    texts.forEach((t, k) => t.classList.toggle('is-on', k === i));
+    dotEls.forEach((d, k) => d.classList.toggle('is-on', k === i));
+    counter.textContent = String(i + 1).padStart(2, '0');
+  };
+  const GAP = 26;
+  // painel ativo centralizado na coluna: metade de um painel para cima, mais os anteriores
+  const offsetFor = (p) => -(panels[0].offsetHeight / 2) - p * (panels[0].offsetHeight + GAP);
+  $$('[data-dce]').forEach((a) => { if (DCE_URL) { a.href = DCE_URL; a.target = '_blank'; a.removeAttribute('data-scroll'); } });
+
+  if (!isDesktop() || reduce) {
+    // celular: sem fixar; a pilha vira uma faixa horizontal e os textos ficam todos visíveis
+    setActive(0);
+    sec.classList.add('show--static');
+    // intercala título e texto de cada projeto, e some com a pilha única
+    const left = $('.show__left', sec);
+    titles.forEach((t, i) => { t.classList.add('is-on'); texts[i].classList.add('is-on'); left.appendChild(t); left.appendChild(texts[i]); });
+    $('[data-show-titles]').remove(); $('[data-show-texts]').remove();
+    return;
+  }
+  let st;
+  function goTo(i) { if (st) scrollTo(st.start + (st.end - st.start) * (i / (n - 1))); }
+  st = ScrollTrigger.create({
+    trigger: sec, start: 'top top', end: () => '+=' + innerHeight * (n - 1) * 0.9, pin: '.show__pin', scrub: true,
+    snap: { snapTo: 1 / (n - 1), duration: 0.5, ease: 'power2.inOut' },
+    onUpdate: (s) => {
+      const p = s.progress * (n - 1);
+      setActive(Math.round(p));
+      gsap.set(stack, { y: offsetFor(p), skewY: -7 });
     },
   });
-})();
-
-/* ---------- Projetos: janela + cursor que seguem o mouse ---------- */
-(() => {
-  const wrap = $('[data-projects]');
-  const list = $('.projects__list', wrap);
-  const modal = $('[data-modal]');
-  const stack = $('[data-modal-stack]');
-  const cur = $('[data-pcur]');
-  const lab = $('[data-pcur-label]');
-  if (!fine || reduce) return;
-
-  const mx = gsap.quickTo(modal, 'left', { duration: 0.8, ease: 'power3' });
-  const my = gsap.quickTo(modal, 'top', { duration: 0.8, ease: 'power3' });
-  const cx = gsap.quickTo(cur, 'left', { duration: 0.5, ease: 'power3' });
-  const cy = gsap.quickTo(cur, 'top', { duration: 0.5, ease: 'power3' });
-  const lx = gsap.quickTo(lab, 'left', { duration: 0.45, ease: 'power3' });
-  const ly = gsap.quickTo(lab, 'top', { duration: 0.45, ease: 'power3' });
-  const move = (x, y) => { mx(x); my(y); cx(x); cy(y); lx(x); ly(y); };
-  const show = (on) => gsap.to([modal, cur, lab], {
-    scale: on ? 1 : 0, duration: 0.4, ease: on ? ioEase : 'power2.in',
-  });
-
-  wrap.addEventListener('mousemove', (e) => move(e.clientX, e.clientY));
-  $$('.row', list).forEach((row) => {
-    row.addEventListener('mouseenter', (e) => {
-      move(e.clientX, e.clientY);
-      stack.style.top = `${row.dataset.row * -100}%`;
-      list.classList.add('is-hover');
-      show(true);
-    });
-    row.addEventListener('mouseleave', () => { list.classList.remove('is-hover'); show(false); });
-  });
-  $$('.row[data-dce]').forEach((a) => { if (DCE_URL) { a.href = DCE_URL; a.target = '_blank'; a.removeAttribute('data-scroll'); } });
+  gsap.set(stack, { y: offsetFor(0), skewY: -7 });
+  setActive(0);
 })();
 
 /* ---------- Faixa de imagens ---------- */
@@ -332,7 +357,6 @@ function tick() {
 tick(); setInterval(tick, 20000);
 
 /* ---------- Início ---------- */
-addEventListener('load', () => {
-  runPreloader().then(heroIntro);
-  ScrollTrigger.refresh();
-});
+// a abertura começa assim que o DOM existe, sem esperar imagens
+runPreloader().then(heroIntro);
+addEventListener('load', () => ScrollTrigger.refresh());
