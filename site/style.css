@@ -295,3 +295,4 @@ ul { padding: 0; list-style: none; }
 }
 .show--static .show__left { gap: 0; padding-right: 0; }
 .show--static .show__left > div { max-width: none; }
+.fan__card img { pointer-events: none; -webkit-user-drag: none; }

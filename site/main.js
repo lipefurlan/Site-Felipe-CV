@@ -170,62 +170,107 @@ ScrollTrigger.create({
 if (!isDesktop()) burger.classList.add('is-on');
 
 /* ---------- Hero: carrossel em leque ---------- */
+// posição contínua: as fotos seguem o dedo/trackpad e depois assentam na mais próxima
 const fan = $('[data-fan]');
 const fanCards = $$('.fan__card', fan);
 const fanCap = $('[data-fan-cap]');
-let fanIndex = 2; // qual foto está no centro
-// cinco "assentos": deslocamento horizontal (vw), vertical (%), rotação, escala e camada
-const SEATS = [
-  { x: -36, y: 24, r: -12, s: 0.92, z: 1 },
-  { x: -19, y: 10, r: -6, s: 0.96, z: 2 },
-  { x: 0, y: 0, r: -1, s: 1.08, z: 3 },
-  { x: 19, y: 8, r: 5, s: 0.96, z: 2 },
-  { x: 36, y: 22, r: 11, s: 0.92, z: 1 },
-];
-const seatOf = (i) => (((i - fanIndex) % fanCards.length) + fanCards.length + 2) % fanCards.length; // 2 = centro
-function layoutFan(animate = true) {
+const FN = fanCards.length;
+const fanState = { pos: 2 }; // qual foto está no centro (pode ser fracionário durante o movimento)
+const wrapOff = (v) => { let o = ((v % FN) + FN) % FN; if (o >= FN / 2) o -= FN; return o; };
+// interpola os "assentos" do leque: 0 = centro, 1 = vizinho, 2 = ponta, 2.5 = some
+const lerpSeat = (pts, a) => { const i = Math.min(Math.floor(a), pts.length - 2); return pts[i] + (pts[i + 1] - pts[i]) * (a - i); };
+const SX = [0, 19, 36, 46], SY = [0, 9, 23, 32], SS = [1.08, 0.96, 0.92, 0.88];
+function renderFan() {
   const vw = innerWidth / 100;
   const narrow = innerWidth <= 900;
   fanCards.forEach((card, i) => {
-    const seat = SEATS[seatOf(i)];
-    const x = (narrow ? seat.x * 0.85 : seat.x) * vw;
-    const props = { xPercent: -50, x, yPercent: seat.y, rotate: seat.r, scale: seat.s, zIndex: seat.z, opacity: narrow && seat.z === 1 ? 0 : 1 };
-    if (animate && !reduce) gsap.to(card, { ...props, duration: 0.9, ease: 'power3.out' });
-    else gsap.set(card, props);
+    const off = wrapOff(i - fanState.pos);
+    const a = Math.min(Math.abs(off), 3);
+    const sgn = Math.sign(off);
+    const fadeFrom = narrow ? 1.4 : 2;
+    gsap.set(card, {
+      xPercent: -50,
+      x: sgn * lerpSeat(SX, a) * (narrow ? 0.85 : 1) * vw,
+      yPercent: lerpSeat(SY, a),
+      rotate: -1 + off * 6,
+      scale: lerpSeat(SS, a),
+      zIndex: 10 - Math.round(a * 2),
+      opacity: gsap.utils.clamp(0, 1, 1 - (a - fadeFrom) / 0.5),
+    });
   });
-  fanCap.textContent = fanCards[fanIndex].dataset.cap;
+  const idx = ((Math.round(fanState.pos) % FN) + FN) % FN;
+  if (fanCap.dataset.i !== String(idx)) { fanCap.dataset.i = idx; fanCap.textContent = fanCards[idx].dataset.cap; }
 }
-function fanGo(dir) { fanIndex = (fanIndex + dir + fanCards.length) % fanCards.length; layoutFan(); }
-layoutFan(false);
-let autoFan = reduce ? null : setInterval(() => fanGo(1), 4500);
+let fanTween = null;
+function fanTo(target, duration = 1.1, ease = 'power3.out') {
+  fanTween?.kill();
+  if (reduce) { fanState.pos = target; renderFan(); return; }
+  fanTween = gsap.to(fanState, { pos: target, duration, ease, onUpdate: renderFan });
+}
+const fanGo = (dir) => fanTo(Math.round(fanState.pos) + dir);
+renderFan();
+let autoFan = reduce ? null : setInterval(() => fanTo(Math.round(fanState.pos) + 1, 1.4, 'power3.inOut'), 4500);
 const stopAuto = () => { if (autoFan) { clearInterval(autoFan); autoFan = null; } };
 $('[data-fan-prev]').addEventListener('click', () => { stopAuto(); fanGo(-1); });
 $('[data-fan-next]').addEventListener('click', () => { stopAuto(); fanGo(1); });
-fanCards.forEach((c, i) => c.addEventListener('click', () => { stopAuto(); if (i !== fanIndex) { fanIndex = i; layoutFan(); } }));
 fan.addEventListener('keydown', (e) => { if (e.key === 'ArrowLeft') { stopAuto(); fanGo(-1); } if (e.key === 'ArrowRight') { stopAuto(); fanGo(1); } });
-// roda do mouse na horizontal (trackpad ou shift+roda) gira o leque
-let wheelLock = 0;
+// trackpad na horizontal (ou shift+roda): as fotos acompanham o gesto e assentam quando ele termina
+let wheelIdle = null;
+let wheelBase = null;
 fan.addEventListener('wheel', (e) => {
   const dx = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : (e.shiftKey ? e.deltaY : 0);
   if (!dx) return;
-  e.preventDefault();
-  const now = Date.now();
-  if (now - wheelLock < 500) return;
-  wheelLock = now; stopAuto(); fanGo(dx > 0 ? 1 : -1);
+  e.preventDefault(); stopAuto(); fanTween?.kill();
+  if (wheelBase === null) wheelBase = Math.round(fanState.pos);
+  const base = wheelBase;
+  // no máximo uma foto por gesto, com resistência perto do limite
+  fanState.pos = gsap.utils.clamp(base - 0.95, base + 0.95, fanState.pos + dx / 600);
+  renderFan();
+  clearTimeout(wheelIdle);
+  wheelIdle = setTimeout(() => {
+    const d = fanState.pos - base;
+    wheelBase = null;
+    fanTo(Math.abs(d) > 0.18 ? base + Math.sign(d) : base, 0.9);
+  }, 120);
 }, { passive: false });
-// arrastar
-let dragX = null;
-fan.addEventListener('pointerdown', (e) => { dragX = e.clientX; fan.setPointerCapture(e.pointerId); });
-fan.addEventListener('pointerup', (e) => {
-  if (dragX === null) return;
-  const d = e.clientX - dragX; dragX = null;
-  if (Math.abs(d) > 40) { stopAuto(); fanGo(d < 0 ? 1 : -1); }
+// arrastar: segue o ponteiro; ao soltar, a velocidade decide para onde vai
+let drag = null;
+fan.addEventListener('pointerdown', (e) => {
+  if (e.button !== 0) return;
+  stopAuto(); fanTween?.kill();
+  drag = { x: e.clientX, pos: fanState.pos, t: performance.now(), lastX: e.clientX, v: 0, moved: false };
+  fan.setPointerCapture(e.pointerId);
+  fan.classList.add('is-drag');
 });
-addEventListener('resize', () => layoutFan(false));
+fan.addEventListener('pointermove', (e) => {
+  if (!drag) return;
+  const now = performance.now();
+  drag.v = (e.clientX - drag.lastX) / Math.max(1, now - drag.t);
+  drag.lastX = e.clientX; drag.t = now;
+  if (Math.abs(e.clientX - drag.x) > 6) drag.moved = true;
+  fanState.pos = drag.pos - (e.clientX - drag.x) / (innerWidth * 0.19);
+  renderFan();
+});
+const endDrag = (e) => {
+  if (!drag) return;
+  fan.classList.remove('is-drag');
+  if (!drag.moved) {
+    // clique simples numa foto lateral traz ela para o centro
+    const card = e.target.closest('.fan__card');
+    const i = fanCards.indexOf(card);
+    if (i >= 0) fanTo(Math.round(fanState.pos) + Math.round(wrapOff(i - fanState.pos)));
+  } else {
+    fanTo(Math.round(fanState.pos - drag.v * 0.6), 0.9);
+  }
+  drag = null;
+};
+fan.addEventListener('pointerup', endDrag);
+fan.addEventListener('pointercancel', endDrag);
+addEventListener('resize', renderFan);
 
 function heroIntro() {
   if (reduce) return;
-  gsap.from(fanCards, { y: 200, opacity: 0, duration: 1.2, ease: 'power4.out', stagger: { each: 0.07, from: 'center' }, clearProps: 'opacity' });
+  gsap.from(fanCards, { y: 220, duration: 1.3, ease: 'power4.out', stagger: { each: 0.07, from: 'center' } });
   gsap.to('[data-slide]', { y: 0, opacity: 1, duration: 0.6, ease: outEase, stagger: 0.08, delay: 0.2 });
   gsap.to($$('.hero__name .w'), { y: 0, duration: 0.8, ease: outEase, stagger: 0.06 });
 }
@@ -242,7 +287,9 @@ $$('h2[data-words]').forEach((el) => {
   gsap.to(words, { y: 0, duration: 0.7, ease: outEase, stagger: 0.03, scrollTrigger: { trigger: el, start: 'top 85%' } });
 });
 
-/* ---------- Vitrine de projetos: seção fixa, scroll troca o projeto ---------- */
+/* ---------- Vitrine de projetos: seção fixa, um projeto por gesto ---------- */
+// A seção prende a página e cada gesto (roda, trackpad, tecla ou swipe) avança só um projeto,
+// com uma transição de 1,2 s. Depois do último projeto a página volta a rolar normalmente.
 (() => {
   const sec = $('[data-show]');
   const titles = $$('h2', $('[data-show-titles]'));
@@ -251,15 +298,13 @@ $$('h2[data-words]').forEach((el) => {
   const panels = $$('.panel', stack);
   const dots = $('[data-show-dots]');
   const counter = $('[data-show-i]');
-  const n = titles.length;          // projetos
-  const N = panels.length;          // painéis (2 por projeto)
-  const projOf = (k) => +panels[k].dataset.p;
+  const n = titles.length;
   const firstPanel = (i) => panels.findIndex((p) => +p.dataset.p === i);
   let current = -1;
   titles.forEach((_, i) => {
     const b = document.createElement('button');
     b.setAttribute('aria-label', `Projeto ${i + 1}`);
-    b.addEventListener('click', () => goTo(i));
+    b.addEventListener('click', () => show(i));
     dots.appendChild(b);
   });
   const dotEls = $$('button', dots);
@@ -281,7 +326,15 @@ $$('h2[data-words]').forEach((el) => {
   titleWords.forEach((ws) => gsap.set(ws, { y: 0, yPercent: 140 }));
   gsap.set(texts, { opacity: 0, y: 24 });
 
-  const setActive = (i, animate = true) => {
+  const GAP = 26;
+  const panelH = () => panels[0].offsetHeight;
+  // os dois painéis do projeto ficam centralizados; os vizinhos aparecem cortados em cima e embaixo
+  const offsetFor = (i) => -(2 * panelH() + GAP) / 2 - firstPanel(i) * (panelH() + GAP);
+  const imgs = panels.map((p) => $('img', p)).filter(Boolean);
+  const DUR = 1.2;
+
+  function show(i, instant = false) {
+    i = gsap.utils.clamp(0, n - 1, i);
     if (i === current) return;
     const dir = i > current ? 1 : -1;
     const prev = current;
@@ -289,57 +342,88 @@ $$('h2[data-words]').forEach((el) => {
     dotEls.forEach((d, k) => d.classList.toggle('is-on', k === i));
     titles.forEach((t, k) => t.classList.toggle('is-on', k === i));
     texts.forEach((t, k) => t.classList.toggle('is-on', k === i));
-    if (!animate) {
+    if (instant || prev < 0) {
+      if (prev >= 0) { gsap.set(titleWords[prev], { yPercent: 140 }); gsap.set(texts[prev], { opacity: 0 }); }
       gsap.set(titleWords[i], { yPercent: 0 });
       gsap.set(texts[i], { opacity: 1, y: 0 });
+      gsap.set(stack, { y: offsetFor(i), skewY: -7 });
       counter.textContent = String(i + 1).padStart(2, '0');
       return;
     }
-    if (prev >= 0) {
-      gsap.to(titleWords[prev], { yPercent: -140 * dir, duration: 0.45, ease: 'power3.in', stagger: 0.02 * dir, overwrite: true });
-      gsap.to(texts[prev], { opacity: 0, y: -18 * dir, duration: 0.3, ease: 'power2.in', overwrite: true });
-    }
-    gsap.fromTo(titleWords[i], { yPercent: 140 * dir }, { yPercent: 0, duration: 0.85, ease: 'power4.out', stagger: 0.045 * dir, delay: 0.12, overwrite: true });
-    gsap.fromTo(texts[i], { opacity: 0, y: 26 * dir }, { opacity: 1, y: 0, duration: 0.65, ease: outEase, delay: 0.22, overwrite: true });
+    // texto que sai
+    gsap.to(titleWords[prev], { yPercent: -140 * dir, duration: 0.5, ease: 'power3.in', stagger: 0.03 * dir, overwrite: true });
+    gsap.to(texts[prev], { opacity: 0, y: -20 * dir, duration: 0.35, ease: 'power2.in', overwrite: true });
+    // pilha: movimento com peso, inclina um pouco mais no meio do trajeto e as fotos fazem contrapeso
+    gsap.to(stack, { y: offsetFor(i), duration: DUR, ease: 'power4.inOut', overwrite: 'auto' });
+    gsap.fromTo(stack, { skewY: -7 }, { skewY: -10, duration: DUR / 2, ease: 'sine.inOut', yoyo: true, repeat: 1 });
+    gsap.fromTo(imgs, { yPercent: 0 }, { yPercent: 9 * dir, duration: DUR / 2, ease: 'sine.in', yoyo: true, repeat: 1, overwrite: true });
+    // texto que entra, depois que a pilha já está chegando
+    gsap.fromTo(titleWords[i], { yPercent: 140 * dir }, { yPercent: 0, duration: 0.9, ease: 'power4.out', stagger: 0.05 * dir, delay: 0.45, overwrite: true });
+    gsap.fromTo(texts[i], { opacity: 0, y: 26 * dir }, { opacity: 1, y: 0, duration: 0.7, ease: outEase, delay: 0.6, overwrite: true });
     gsap.fromTo(counter, { yPercent: 60 * dir, opacity: 0 }, {
-      yPercent: 0, opacity: 1, duration: 0.5, ease: outEase, overwrite: true,
+      yPercent: 0, opacity: 1, duration: 0.5, ease: outEase, delay: 0.45, overwrite: true,
       onStart: () => { counter.textContent = String(i + 1).padStart(2, '0'); },
     });
-  };
+  }
 
-  const GAP = 26;
-  const panelH = () => panels[0].offsetHeight;
-  // painel ativo centralizado na coluna: metade de um painel para cima, mais os anteriores
-  const offsetFor = (p) => -(panelH() / 2) - p * (panelH() + GAP);
-  const moveStack = gsap.quickTo(stack, 'y', { duration: 0.75, ease: 'power3' });
-  const imgs = panels.map((p) => $('img', p));
-  const parallax = (p) => {
-    imgs.forEach((img, k) => {
-      if (!img) return;
-      const d = gsap.utils.clamp(-1.6, 1.6, k - p);
-      gsap.set(img, { yPercent: -9 * d, scale: 1 + Math.abs(d) * 0.02 });
-    });
-  };
-
-  let st;
-  function goTo(i) { if (st) scrollTo(st.start + (st.end - st.start) * (firstPanel(i) / (N - 1))); }
-  gsap.set(stack, { y: offsetFor(0), skewY: -7 });
-  parallax(0);
-  setActive(0, false);
-  st = ScrollTrigger.create({
-    trigger: sec, start: 'top top', end: () => '+=' + innerHeight * (N - 1) * 0.55, pin: '.show__pin', scrub: true,
-    snap: { snapTo: 1 / (N - 1), duration: { min: 0.25, max: 0.6 }, delay: 0.05, ease: 'power2.inOut' },
-    invalidateOnRefresh: true,
-    onUpdate: (s) => {
-      const p = s.progress * (N - 1);
-      moveStack(offsetFor(p));
-      parallax(p);
-      setActive(projOf(Math.round(p)));
-    },
-    onRefresh: (s) => { gsap.set(stack, { y: offsetFor(s.progress * (N - 1)), skewY: -7 }); },
+  // --- controle do scroll enquanto a seção está presa ---
+  let active = false;
+  let lockUntil = 0;
+  const st = ScrollTrigger.create({
+    trigger: sec, start: 'top top', end: '+=100%', pin: '.show__pin',
+    onToggle: (s) => { if (s.isActive && !active) engage(s.direction > 0 ? 0 : n - 1); },
+    onRefresh: () => { if (current >= 0) gsap.set(stack, { y: offsetFor(current) }); },
   });
-  // clique num painel leva ao projeto dele
-  panels.forEach((pn, k) => pn.addEventListener('click', () => goTo(projOf(k))));
+  const jump = (y) => { if (lenis) lenis.scrollTo(y, { immediate: true, force: true }); else window.scrollTo(0, y); };
+  function engage(i) {
+    active = true;
+    lenis?.stop();
+    jump(st.start + Math.round((st.end - st.start) / 2));
+    show(i);
+    // a inércia do gesto que trouxe até aqui não pode pular o primeiro projeto
+    lockUntil = performance.now() + 700;
+  }
+  function release(dir) {
+    active = false;
+    lenis?.start();
+    jump(dir > 0 ? st.end + 2 : st.start - 2);
+  }
+  function step(dir) {
+    const now = performance.now();
+    if (now < lockUntil) return;
+    if ((dir > 0 && current === n - 1) || (dir < 0 && current === 0)) { release(dir); return; }
+    show(current + dir);
+    lockUntil = now + DUR * 1000 - 150;
+  }
+  addEventListener('wheel', (e) => {
+    if (!active) return;
+    e.preventDefault();
+    const now = performance.now();
+    // um gesto contínuo (inclusive a inércia do trackpad) mantém a trava: só um projeto por gesto
+    if (now < lockUntil) { lockUntil = Math.max(lockUntil, now + 160); return; }
+    if (Math.abs(e.deltaY) < 4) return;
+    step(e.deltaY > 0 ? 1 : -1);
+  }, { passive: false, capture: true });
+  addEventListener('keydown', (e) => {
+    if (!active) return;
+    const down = ['ArrowDown', 'PageDown', ' '].includes(e.key);
+    const up = ['ArrowUp', 'PageUp'].includes(e.key);
+    if (!down && !up) return;
+    e.preventDefault();
+    step(down ? 1 : -1);
+  });
+  let touchY = null;
+  addEventListener('touchstart', (e) => { if (active) touchY = e.touches[0].clientY; }, { passive: true });
+  addEventListener('touchmove', (e) => {
+    if (!active || touchY === null) return;
+    e.preventDefault();
+    const d = touchY - e.touches[0].clientY;
+    if (Math.abs(d) > 50) { step(d > 0 ? 1 : -1); touchY = null; }
+  }, { passive: false });
+  // links do menu/âncoras que pedem para sair da seção
+  addEventListener('click', (e) => { if (active && e.target.closest('[data-scroll]')) { active = false; lenis?.start(); } }, true);
+
+  show(0, true);
 })();
 
 /* ---------- Faixa de imagens ---------- */
